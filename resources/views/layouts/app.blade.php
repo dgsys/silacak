@@ -13,6 +13,7 @@
     <a href="{{ route('lacak') }}">Lacak resi</a>
     <a href="{{ route('ongkir') }}">Cek ongkir</a>
     @auth
+        <a href="{{ route('dashboard') }}">Dashboard</a>
         <a href="{{ route('shipments.index') }}">Paket</a>
         @if (auth()->user()->isAdmin())
             <a href="{{ route('branches.index') }}">Cabang</a>

@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Enums\ShipmentStatus;
 use App\Models\Branch;
 use App\Models\Customer;
 use App\Models\Service;
@@ -216,6 +217,42 @@ class SilacakTest extends TestCase
     public function test_tamu_dialihkan_ke_login(): void
     {
         $this->get('/shipments')->assertRedirect(route('login'));
+    }
+
+    public function test_dashboard_menampilkan_statistik_total_untuk_admin(): void
+    {
+        $this->buatPaket($this->a, $this->b);
+        $shipment = $this->buatPaket($this->b, $this->c);
+        $shipment->update(['status_terakhir' => ShipmentStatus::Terkirim]);
+        $admin = User::create([
+            'nama' => 'Admin Uji', 'email' => 'dashboard-admin@uji.test',
+            'password' => 'rahasia-uji-123', 'role' => 'admin',
+        ]);
+
+        $this->actingAs($admin)
+            ->get(route('dashboard'))
+            ->assertOk()
+            ->assertSee('data-stat="shipments">2</p>', false)
+            ->assertSee('data-stat="customers">2</p>', false)
+            ->assertSee('data-stat="branches">3</p>', false)
+            ->assertSee('data-status="DITERIMA">1</span>', false)
+            ->assertSee('data-status="TERKIRIM">1</span>', false)
+            ->assertSee('data-status="DIPROSES">0</span>', false);
+    }
+
+    public function test_dashboard_petugas_cabang_hanya_menghitung_data_cabangnya(): void
+    {
+        $this->buatPaket($this->a, $this->b);
+        $this->buatPaket($this->b, $this->c);
+
+        $this->actingAs($this->petugas($this->a))
+            ->get(route('dashboard'))
+            ->assertOk()
+            ->assertSee('data-stat="shipments">1</p>', false)
+            ->assertSee('data-stat="customers">1</p>', false)
+            ->assertSee('data-stat="branches">1</p>', false)
+            ->assertSee('data-status="DITERIMA">1</span>', false)
+            ->assertSee('data-status="TERKIRIM">0</span>', false);
     }
 
     public function test_cabang_tidak_boleh_melihat_paket_cabang_lain(): void

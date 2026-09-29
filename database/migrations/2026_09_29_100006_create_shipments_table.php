@@ -21,9 +21,9 @@ return new class extends Migration
             $t->unsignedSmallInteger('panjang')->default(0);
             $t->unsignedSmallInteger('lebar')->default(0);
             $t->unsignedSmallInteger('tinggi')->default(0);
-            $t->unsignedSmallInteger('berat_tagih');
-            $t->unsignedBigInteger('nilai_barang')->default(0);
-            $t->unsignedBigInteger('ongkir');
+            $t->decimal('berat_tagih', 10, 2);
+            $t->decimal('nilai_barang', 10, 2)->default(0);
+            $t->decimal('ongkir', 12, 2);
             $t->string('status_terakhir', 30)->default('DITERIMA')->index();
             $t->timestamps();
 

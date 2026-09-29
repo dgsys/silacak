@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\BranchController;
 use App\Http\Controllers\CustomerSearchController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LacakController;
 use App\Http\Controllers\OngkirController;
 use App\Http\Controllers\ShipmentController;
@@ -26,6 +27,10 @@ Route::middleware('guest')->group(function () {
 Route::post('/logout', [LoginController::class, 'logout'])->middleware('auth')->name('logout');
 
 // ---- Area internal (admin & cabang) --------------------------------------
+Route::get('/dashboard', DashboardController::class)
+    ->middleware(['auth', 'role:admin,cabang'])
+    ->name('dashboard');
+
 Route::get('/customers/search', CustomerSearchController::class)
     ->middleware(['auth', 'role:admin,cabang'])
     ->name('customers.search');

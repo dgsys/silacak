@@ -209,6 +209,71 @@
         @apply text-[1.3rem] font-semibold;
     }
 
+    .dashboard-heading {
+        @apply mb-5 flex items-end justify-between;
+    }
+
+    .dashboard-heading h1 {
+        @apply mb-0;
+    }
+
+    .dashboard-eyebrow {
+        @apply mb-1 text-[.78rem] font-semibold uppercase text-[#657084];
+    }
+
+    .dashboard-stats {
+        @apply grid grid-cols-[repeat(auto-fit,minmax(190px,1fr))] gap-4;
+    }
+
+    .dashboard-stat {
+        @apply rounded-lg border border-[#dde2ea] border-t-4 bg-white p-5;
+        border-top-color: var(--stat-accent);
+    }
+
+    .dashboard-stat--shipments {
+        --stat-accent: #0b5fff;
+    }
+
+    .dashboard-stat--customers {
+        --stat-accent: #0a7d4b;
+    }
+
+    .dashboard-stat--branches {
+        --stat-accent: #c36a13;
+    }
+
+    .dashboard-stat h2 {
+        @apply mb-3 text-[.95rem] text-[#657084];
+    }
+
+    .dashboard-stat__value {
+        @apply mb-1 text-[2rem] font-semibold leading-tight;
+    }
+
+    .dashboard-stat__caption {
+        @apply m-0 text-[.85rem] text-[#657084];
+    }
+
+    .dashboard-statuses {
+        @apply mt-8;
+    }
+
+    .dashboard-statuses h2 {
+        @apply mb-2 text-[1.1rem];
+    }
+
+    .dashboard-status-list {
+        @apply m-0 grid list-none grid-cols-1 gap-x-8 p-0 sm:grid-cols-2;
+    }
+
+    .dashboard-status-item {
+        @apply flex items-center justify-between gap-4 border-b border-[#dde2ea] py-3;
+    }
+
+    .dashboard-status-count {
+        @apply min-w-8 text-right font-semibold tabular-nums;
+    }
+
     .inline {
         @apply flex gap-2;
     }
