@@ -1,0 +1,223 @@
+@import 'tailwindcss';
+
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+@source '../**/*.blade.php';
+@source '../**/*.js';
+
+@theme {
+    --font-sans: ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+}
+
+:root {
+    --bg: #f6f7f9;
+    --card: #fff;
+    --ink: #1c2430;
+    --muted: #657084;
+    --line: #dde2ea;
+    --brand: #0b5fff;
+    --ok: #0a7d4b;
+    --err: #b3261e;
+}
+
+@layer base {
+    * {
+        @apply box-border;
+    }
+
+    body {
+        @apply m-0 font-sans leading-normal text-[#1c2430];
+        background: var(--bg);
+    }
+
+    a {
+        @apply text-[#0b5fff];
+    }
+
+    h1 {
+        @apply mb-4 mt-0 text-[1.4rem] font-semibold;
+    }
+
+    h2 {
+        @apply mb-3 mt-0 text-[1.05rem] font-semibold;
+    }
+
+    label {
+        @apply mb-1 mt-3 block text-[.9rem];
+    }
+
+    input,
+    select,
+    textarea {
+        @apply w-full rounded-lg border border-[#dde2ea] bg-white px-[.65rem] py-[.55rem] font-[inherit];
+    }
+
+    table {
+        @apply w-full border-collapse;
+    }
+
+    th,
+    td {
+        @apply border-b border-[#dde2ea] p-2 text-left text-[.92rem];
+    }
+}
+
+@layer components {
+    .nav {
+        @apply flex flex-wrap items-center gap-4 border-b border-[#dde2ea] bg-white px-4 py-3;
+    }
+
+    .nav .brand {
+        @apply mr-auto font-semibold text-[#1c2430] no-underline;
+    }
+
+    .nav form,
+    .branch-actions form {
+        @apply m-0;
+    }
+
+    .wrap {
+        @apply mx-auto my-6 max-w-[860px] px-4;
+    }
+
+    .card {
+        @apply mb-4 rounded-[10px] border border-[#dde2ea] bg-white p-5;
+    }
+
+    .row {
+        @apply grid grid-cols-[repeat(auto-fit,minmax(180px,1fr))] gap-3;
+    }
+
+    .btn {
+        @apply inline-block cursor-pointer rounded-lg border-0 bg-[#0b5fff] px-4 py-[.6rem] font-[inherit] text-white no-underline;
+    }
+
+    .btn.secondary {
+        @apply bg-[#e8ecf3] text-[#1c2430];
+    }
+
+    .btn.link {
+        @apply bg-transparent p-0 text-[#0b5fff];
+    }
+
+    .check-row {
+        @apply my-3 flex items-center gap-2;
+    }
+
+    .check-row input {
+        @apply m-0 w-auto;
+    }
+
+    .customer-lookup {
+        @apply relative;
+    }
+
+    .customer-search-results {
+        @apply absolute left-0 right-0 top-full z-10 mt-1 max-h-72 overflow-y-auto rounded-md border border-[#dde2ea] bg-white p-0 shadow-lg;
+    }
+
+    .customer-search-results[hidden] {
+        display: none;
+    }
+
+    .customer-search-option {
+        @apply block w-full cursor-pointer border-0 border-b border-[#dde2ea] bg-white px-3 py-2 text-left text-[#1c2430];
+        font: inherit;
+    }
+
+    .customer-search-option:last-child {
+        @apply border-b-0;
+    }
+
+    .customer-search-option:hover,
+    .customer-search-option:focus-visible {
+        @apply bg-[#edf3ff];
+        outline: 0;
+    }
+
+    .customer-lookup #customer_search_clear {
+        @apply mt-2;
+    }
+
+    .branch-actions {
+        @apply flex flex-wrap items-center gap-2;
+    }
+
+    .btn.branch-edit,
+    .btn.branch-delete {
+        @apply inline-flex items-center justify-center whitespace-nowrap rounded-md border px-3 py-2 text-[.88rem] font-semibold transition;
+    }
+
+    .btn.branch-edit {
+        @apply border-[#cbdcff] bg-[#eaf1ff] text-[#1647a8];
+    }
+
+    .btn.branch-edit:hover {
+        @apply border-[#a9c4ff] bg-[#dce8ff];
+    }
+
+    .btn.branch-delete {
+        @apply border-[#efc7c4] bg-[#fff1f0] text-[#a32920];
+    }
+
+    .btn.branch-delete:hover {
+        @apply border-[#e7aaa5] bg-[#ffe2df];
+    }
+
+    .branch-actions .btn:focus-visible {
+        @apply outline outline-[3px] outline-offset-2 outline-[#789eff];
+    }
+
+    .branch-actions .btn:active {
+        @apply translate-y-px;
+    }
+
+    .err {
+        @apply my-1 text-[.85rem] text-[#b3261e];
+    }
+
+    .flash {
+        @apply mb-4 rounded-lg border border-[#b7e3cc] bg-[#e6f6ee] px-3 py-2 text-[#0a7d4b];
+    }
+
+    .muted {
+        @apply text-[.9rem] text-[#657084];
+    }
+
+    .badge {
+        @apply inline-block rounded-full bg-[#e8f0ff] px-2 py-1 text-[.8rem] text-[#0b3fa8];
+    }
+
+    .timeline {
+        @apply m-0 list-none border-l-2 border-[#dde2ea] p-0;
+    }
+
+    .timeline li {
+        @apply relative pb-4 pl-4;
+    }
+
+    .timeline li::before {
+        @apply absolute left-[-7px] top-1 h-3 w-3 rounded-full bg-[#dde2ea];
+        content: '';
+    }
+
+    .timeline li:first-child::before {
+        @apply bg-[#0b5fff];
+    }
+
+    .total {
+        @apply text-[1.3rem] font-semibold;
+    }
+
+    .inline {
+        @apply flex gap-2;
+    }
+
+    .inline input {
+        @apply flex-1;
+    }
+
+    .inline .btn {
+        @apply whitespace-nowrap;
+    }
+}
