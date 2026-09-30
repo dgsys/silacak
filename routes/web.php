@@ -6,6 +6,7 @@ use App\Http\Controllers\CustomerSearchController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LacakController;
 use App\Http\Controllers\OngkirController;
+use App\Http\Controllers\ServerMonitoringController;
 use App\Http\Controllers\ShipmentController;
 use Illuminate\Support\Facades\Route;
 
@@ -31,6 +32,10 @@ Route::get('/dashboard', DashboardController::class)
     ->middleware(['auth', 'role:admin,cabang'])
     ->name('dashboard');
 
+Route::get('/monitoring/server', ServerMonitoringController::class)
+    ->middleware(['auth', 'role:admin'])
+    ->name('server-monitoring');
+
 Route::get('/customers/search', CustomerSearchController::class)
     ->middleware(['auth', 'role:admin,cabang'])
     ->name('customers.search');
@@ -45,3 +50,7 @@ Route::middleware(['auth', 'role:admin,cabang'])->prefix('shipments')->name('shi
 });
 
 Route::middleware(['auth', 'role:admin'])->resource('branches', BranchController::class)->except('show');
+
+Route::get('/test-sentry', function () {
+    throw new \Exception('Test error ke Sentry dari SiLacak');
+});

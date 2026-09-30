@@ -12,6 +12,7 @@ use App\Services\Shipment\ShipmentService;
 use Database\Seeders\ServiceSeeder;
 use Illuminate\Foundation\Http\Middleware\ValidateCsrfToken;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Log;
 use Tests\TestCase;
 
 class SilacakTest extends TestCase
@@ -255,6 +256,25 @@ class SilacakTest extends TestCase
             ->assertSee('data-status="TERKIRIM">0</span>', false);
     }
 
+    public function test_monitoring_server_hanya_dapat_diakses_admin(): void
+    {
+        $admin = User::create([
+            'nama' => 'Admin Uji', 'email' => 'monitoring-admin@uji.test',
+            'password' => 'rahasia-uji-123', 'role' => 'admin',
+        ]);
+
+        $this->actingAs($admin)
+            ->get(route('server-monitoring'))
+            ->assertOk()
+            ->assertSee('Monitoring Server')
+            ->assertSee('Memori proses PHP')
+            ->assertSee('Penyimpanan server');
+
+        $this->actingAs($this->petugas($this->a))
+            ->get(route('server-monitoring'))
+            ->assertForbidden();
+    }
+
     public function test_cabang_tidak_boleh_melihat_paket_cabang_lain(): void
     {
         $paketAB = $this->buatPaket($this->a, $this->b);
@@ -272,6 +292,13 @@ class SilacakTest extends TestCase
     public function test_status_diperbarui_dan_riwayat_bertambah(): void
     {
         $p = $this->buatPaket($this->a, $this->b);
+        Log::shouldReceive('channel')->once()->with('shipments')->andReturnSelf();
+        Log::shouldReceive('info')->once()->withArgs(fn (string $event, array $context): bool =>
+            $event === 'resi.status_diperbarui'
+            && $context['nomor_resi'] === $p->resi
+            && $context['status_sebelumnya'] === 'DITERIMA'
+            && $context['status_baru'] === 'DALAM_PERJALANAN'
+        );
 
         $this->actingAs($this->petugas($this->a))
             ->post(route('shipments.status', $p), ['status' => 'DALAM_PERJALANAN', 'catatan' => 'Berangkat'])
@@ -279,6 +306,42 @@ class SilacakTest extends TestCase
 
         $this->assertSame('DALAM_PERJALANAN', $p->fresh()->status_terakhir->value);
         $this->assertSame(2, $p->events()->count());
+    }
+
+    public function test_pembuatan_shipment_mencatat_log_terstruktur(): void
+    {
+        $admin = User::create([
+            'nama' => 'Admin Log', 'email' => 'admin-log@uji.test',
+            'password' => 'rahasia-uji-123', 'role' => 'admin',
+        ]);
+        Log::shouldReceive('channel')->once()->with('shipments')->andReturnSelf();
+        Log::shouldReceive('info')->once()->withArgs(function (string $event, array $context) use ($admin): bool {
+            $shipment = Shipment::first();
+
+            return $event === 'resi.dibuat'
+                && $shipment !== null
+                && $context['nomor_resi'] === $shipment->resi
+                && $context['pelanggan_id'] === $shipment->customer_id
+                && $context['pelanggan_nama'] === 'Customer Log'
+                && $context['berat_tagih'] === $shipment->berat_tagih
+                && $context['total_biaya'] === $shipment->ongkir
+                && $context['user_email'] === $admin->email
+                && isset($context['ip_address'], $context['waktu']);
+        });
+
+        $this->actingAs($admin)
+            ->post(route('shipments.store'), [
+                'customer_nama' => 'Customer Log',
+                'customer_telepon' => '081234567890',
+                'service_id' => Service::where('kode', 'REGULER')->value('id'),
+                'origin_branch_id' => $this->a->id,
+                'dest_branch_id' => $this->b->id,
+                'penerima_nama' => 'Penerima Uji',
+                'penerima_alamat' => 'Alamat tujuan uji',
+                'berat_aktual' => '1.25',
+            ])
+            ->assertRedirect();
+
     }
 
     public function test_api_lacak_json(): void

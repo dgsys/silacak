@@ -73,6 +73,13 @@ return [
             'replace_placeholders' => true,
         ],
 
+        'shipments' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/shipments.log'),
+            'level' => 'info',
+            'replace_placeholders' => true,
+        ],
+
         'slack' => [
             'driver' => 'slack',
             'url' => env('LOG_SLACK_WEBHOOK_URL'),
