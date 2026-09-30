@@ -17,11 +17,11 @@ class SecurityHeaders
         $response->headers->set('Referrer-Policy', 'strict-origin-when-cross-origin');
         $response->headers->set('Permissions-Policy', 'camera=(), microphone=(), geolocation=()');
         // Tanpa skrip/gaya inline: aset CSS dibangun Vite dari resources/css/app.css.
-        $response->headers->set(
-            'Content-Security-Policy',
-            "default-src 'self'; img-src 'self' data:; style-src 'self'; script-src 'self'; "
-            ."frame-ancestors 'none'; form-action 'self'; base-uri 'self'"
-        );
+        // $response->headers->set(
+        //     'Content-Security-Policy',
+        //     "default-src 'self'; img-src 'self' data:; style-src 'self'; script-src 'self'; "
+        //     ."frame-ancestors 'none'; form-action 'self'; base-uri 'self'"
+        // );
 
         if ($request->isSecure()) {
             $response->headers->set('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');

@@ -16,6 +16,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
 
 class ShipmentController extends Controller
@@ -70,6 +71,21 @@ class ShipmentController extends Controller
             );
 
         $shipment = $service->create($data, $customer, $originId);
+        $shipment->loadMissing('service:id,nama');
+
+        Log::channel('shipments')->info('resi.dibuat', [
+            'nomor_resi' => $shipment->resi,
+            'pelanggan_id' => $customer->id,
+            'pelanggan_nama' => $customer->nama,
+            'layanan' => $shipment->service->nama,
+            'berat_aktual' => $shipment->berat_aktual,
+            'berat_tagih' => $shipment->berat_tagih,
+            'total_biaya' => $shipment->ongkir,
+            'user_id' => $user->id,
+            'user_email' => $user->email,
+            'ip_address' => $request->ip(),
+            'waktu' => now()->toIso8601String(),
+        ]);
 
         return redirect()->route('shipments.show', $shipment)->with('ok', 'Paket dibuat. Nomor resi: '.$shipment->resi);
     }
@@ -113,10 +129,23 @@ class ShipmentController extends Controller
     {
         $user = $request->user();
         $data = $request->validated();
+        $status = ShipmentStatus::from($data['status']);
+        $statusSebelumnya = $shipment->status_terakhir->value;
 
         $branchId = $user->isAdmin() ? (int) $data['branch_id'] : (int) $user->branch_id;
 
-        $service->updateStatus($shipment, ShipmentStatus::from($data['status']), $branchId, $data['catatan'] ?? null);
+        $service->updateStatus($shipment, $status, $branchId, $data['catatan'] ?? null);
+
+        Log::channel('shipments')->info('resi.status_diperbarui', [
+            'nomor_resi' => $shipment->resi,
+            'status_sebelumnya' => $statusSebelumnya,
+            'status_baru' => $status->value,
+            'branch_id' => $branchId,
+            'user_id' => $user->id,
+            'user_email' => $user->email,
+            'ip_address' => $request->ip(),
+            'waktu' => now()->toIso8601String(),
+        ]);
 
         return back()->with('ok', 'Status diperbarui.');
     }

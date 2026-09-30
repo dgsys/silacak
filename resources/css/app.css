@@ -209,6 +209,132 @@
         @apply text-[1.3rem] font-semibold;
     }
 
+    .dashboard-heading {
+        @apply mb-5 flex items-end justify-between;
+    }
+
+    .dashboard-heading h1 {
+        @apply mb-0;
+    }
+
+    .dashboard-eyebrow {
+        @apply mb-1 text-[.78rem] font-semibold uppercase text-[#657084];
+    }
+
+    .dashboard-stats {
+        @apply grid grid-cols-[repeat(auto-fit,minmax(190px,1fr))] gap-4;
+    }
+
+    .dashboard-stat {
+        @apply rounded-lg border border-[#dde2ea] border-t-4 bg-white p-5;
+        border-top-color: var(--stat-accent);
+    }
+
+    .dashboard-stat--shipments {
+        --stat-accent: #0b5fff;
+    }
+
+    .dashboard-stat--customers {
+        --stat-accent: #0a7d4b;
+    }
+
+    .dashboard-stat--branches {
+        --stat-accent: #c36a13;
+    }
+
+    .dashboard-stat h2 {
+        @apply mb-3 text-[.95rem] text-[#657084];
+    }
+
+    .dashboard-stat__value {
+        @apply mb-1 text-[2rem] font-semibold leading-tight;
+    }
+
+    .dashboard-stat__caption {
+        @apply m-0 text-[.85rem] text-[#657084];
+    }
+
+    .dashboard-statuses {
+        @apply mt-8;
+    }
+
+    .dashboard-statuses h2 {
+        @apply mb-2 text-[1.1rem];
+    }
+
+    .dashboard-status-list {
+        @apply m-0 grid list-none grid-cols-1 gap-x-8 p-0 sm:grid-cols-2;
+    }
+
+    .dashboard-status-item {
+        @apply flex items-center justify-between gap-4 border-b border-[#dde2ea] py-3;
+    }
+
+    .dashboard-status-count {
+        @apply min-w-8 text-right font-semibold tabular-nums;
+    }
+
+    .monitoring-grid {
+        @apply grid grid-cols-[repeat(auto-fit,minmax(250px,1fr))] gap-4;
+    }
+
+    .monitoring-panel {
+        @apply rounded-lg border border-[#dde2ea] bg-white p-5;
+    }
+
+    .monitoring-panel__heading {
+        @apply mb-5 flex items-center justify-between;
+    }
+
+    .monitoring-panel__heading h2 {
+        @apply m-0 text-[.95rem] text-[#657084];
+    }
+
+    .monitoring-indicator {
+        @apply h-2.5 w-2.5 rounded-full bg-[#c36a13];
+    }
+
+    .monitoring-indicator--green {
+        @apply bg-[#0a7d4b];
+    }
+
+    .monitoring-indicator--orange {
+        @apply bg-[#c36a13];
+    }
+
+    .monitoring-indicator--blue {
+        @apply bg-[#0b5fff];
+    }
+
+    .monitoring-value {
+        @apply mb-1 text-[2rem] font-semibold leading-tight;
+    }
+
+    .monitoring-panel .muted {
+        @apply mb-3;
+    }
+
+    .monitoring-progress {
+        @apply h-2 w-full overflow-hidden rounded-full;
+        accent-color: #0b5fff;
+    }
+
+    .monitoring-detail {
+        @apply mb-0 mt-2 text-[.82rem] text-[#657084];
+    }
+
+    .monitoring-unavailable {
+        @apply mb-1 font-semibold;
+    }
+
+    .monitoring-loads {
+        @apply grid grid-cols-3 gap-3;
+    }
+
+    .monitoring-loads strong {
+        @apply mt-1 block text-[1.25rem] tabular-nums;
+    }
+
     .inline {
         @apply flex gap-2;
     }
